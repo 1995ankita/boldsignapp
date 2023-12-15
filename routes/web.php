@@ -1,7 +1,8 @@
 <?php
 
-use App\Http\Controllers\TemplateController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\TemplateController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,4 +32,5 @@ Route::get('/list', [TemplateController::class, 'list']);
 Route::get('/download-pdf', [TemplateController::class, 'downloadPdf'])->name('download-pdf');
 Route::get('/download-audittrail', [TemplateController::class, 'downloadAudittrail'])->name('download-audittrail');
 
-
+Route::get('/authorize',  [AuthController::class, 'redirectToAuthorization'])->name('auth.authorize');
+Route::get('/callback', [AuthController::class, 'handleAuthorizationCallback'])->name('auth.callback');
