@@ -13,7 +13,8 @@ class TemplateController extends Controller
 
     public function __construct()
     {
-        $this->apiKey = 'MGIwZDNmNzUtYWVmNi00ZDcyLTlmODYtNjNjMTk0MGM3Nzc0';//pooja
+        $this->apiKey = 'MGIwZDNmNzUtYWVmNi00ZDcyLTlmODYtNjNjMTk0MGM3Nzc0'; //pooja
+        //$this->apiKey = 'NWIzNDA1MGQtMjViNy00YTI0LWJiYjEtYTc5OWZmZTE1MTUy'; //dhara
     }
     public function showMailForm()
     {
@@ -35,24 +36,88 @@ class TemplateController extends Controller
                 'signerType' => 'Signer',
                 'formFields' => array(
                     array(
-                        'id' => 'string',
-                        'name' => 'string',
-                        'fieldType' => 'Signature',
+                        'id' => 'RadioButton1',
+                        'name' => 'RadioButton',
+                        'fieldType' => 'RadioButton',
+                        'groupName' => 'ConditionalLogic',
+                        'pageNumber' => 1,
+                        'bounds' =>  array(
+                            'x' => 50,
+                            'y' => 50,
+                            'width' => 20,
+                            'height' => 20
+                        ),
+                        "value" => "off",
+                        'isRequired' => false,
+                    ),
+                    array(
+                        'id' => 'Radiobutton2',
+                        'name' => 'RadioButton',
+                        'fieldType' => 'RadioButton',
+                        'groupName' => 'ConditionalLogic',
                         'pageNumber' => 1,
                         'bounds' => array(
-                            // 'x' => 500,
-                            // 'y' => 50,
-                            'width' => 100,
-                            'height' => 100
+                            'x' => 50,
+                            'y' => 70,
+                            'width' => 20,
+                            'height' => 20
                         ),
-                        'isRequired' => true
+                        "value" => "off",
+                        "conditionalRules" => array(
+                            array(
+                                "fieldId" => "TextBoxField",
+                                "isChecked" => true
+                            )
+                        ),
+                        'isRequired' => false,
+                    ),
+                    array(
+                        'id' => 'TextBoxField',
+                        'name' => 'TextBoxField',
+                        'fieldType' => 'TextBox',
+                        'pageNumber' => 1,
+                        'bounds' => array(
+                            'x' => 50,
+                            'y' => 100,
+                            'width' => 200,
+                            'height' => 80
+                        ),
+                        'isRequired' => true,
+                        'multiline' => true,
+                    ),
+                    array(
+                        'id' => 'correct',
+                        'name' => 'correct',
+                        'fieldType' => 'TextBox',
+                        'pageNumber' => 1,
+                        'bounds' => array(
+                            'x' => 75,
+                            'y' => 50,
+                            'width' => 100,
+                            'height' => 15
+                        ),
+                        'isRequired' => false,
+                        'isReadOnly' => true,
+                        "value" => "correct address",
+                    ),
+                    array(
+                        'id' => 'incorrect',
+                        'name' => 'incorrect',
+                        'fieldType' => 'TextBox',
+                        'pageNumber' => 1,
+                        'bounds' => array(
+                            'x' => 75,
+                            'y' => 70,
+                            'width' => 200,
+                            'height' => 15
+                        ),
+                        'isRequired' => false,
+                        'isReadOnly' => true,
+                        'value' => 'incorrect address',
                     )
                 ),
-                'locale' => 'EN'
-            )),
-            'cc' => json_encode(array(
-                "emailAddress" => "ankita.hirpara56@gmail.com",
 
+                'locale' => 'EN'
             )),
             'cc' => json_encode(array(
                 "emailAddress" => "pooja.solapurmath461@gmail.com",
@@ -65,6 +130,52 @@ class TemplateController extends Controller
             'Files' => new CURLFile($filePath, 'application/pdf', 'sample.pdf'),
             'Title' => 'eSign Document',
         );
+
+        // $signerData = [
+        //     'name' => 'Hanky',
+        //     'emailAddress' => 'hankyWhites@cubeflakes.com',
+        //     'signerType' => 'Signer',
+        //     'formFields' => [
+        //         [
+        //             'id' => 'string',
+        //             'name' => 'string',
+        //             'fieldType' => 'RadioButton',
+        //             'groupName' => 'Group1',
+        //             'pageNumber' => 1,
+        //             'bounds' => [
+        //                 'x' => 50,
+        //                 'y' => 50,
+        //                 'width' => 20,
+        //                 'height' => 20
+        //             ],
+        //             'isRequired' => true,
+        //         ],
+        //         [
+        //             'id' => 'string1',
+        //             'name' => 'string1',
+        //             'fieldType' => 'RadioButton',
+        //             'groupName' => 'Group1',
+        //             'pageNumber' => 1,
+        //             'bounds' => [
+        //                 'x' => 100,
+        //                 'y' => 100,
+        //                 'width' => 20,
+        //                 'height' => 20
+        //             ],
+        //             'isRequired' => true,
+        //         ]
+        //     ],
+        //     'locale' => 'EN'
+        // ];
+
+        // $postData = array(
+        //     'AutoDetectFields' => 'true',
+        //     'Message' => '',
+        //     'Signers' =>  json_encode($signerData),
+        //     'Files' => new CURLFile($filePath, 'application/pdf', 'sample.pdf'),
+        //     'Title' => 'eSign Document',
+        // );
+
 
         $headers = array(
             'accept: application/json',
