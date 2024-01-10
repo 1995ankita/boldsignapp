@@ -13,8 +13,8 @@ class TemplateController extends Controller
 
     public function __construct()
     {
-        $this->apiKey = 'MGIwZDNmNzUtYWVmNi00ZDcyLTlmODYtNjNjMTk0MGM3Nzc0'; //pooja
-        //$this->apiKey = 'NWIzNDA1MGQtMjViNy00YTI0LWJiYjEtYTc5OWZmZTE1MTUy'; //dhara
+        // $this->apiKey = 'MGIwZDNmNzUtYWVmNi00ZDcyLTlmODYtNjNjMTk0MGM3Nzc0'; //pooja
+        $this->apiKey = 'NWIzNDA1MGQtMjViNy00YTI0LWJiYjEtYTc5OWZmZTE1MTUy'; //dhara
     }
     public function showMailForm()
     {
@@ -24,161 +24,163 @@ class TemplateController extends Controller
     {
         $name = $request->input('name');
         $email = $request->input('email');
+        $OnBehalfOf = $request->input('OnBehalfOf');
         $url = 'https://api.boldsign.com/v1/document/send';
         $filePath = public_path('pdfs/file-example_PDF_500_kB.pdf');
 
-        $postData = array(
-            'AutoDetectFields' => 'true',
-            'Message' => '',
-            'Signers' => json_encode(array(
-                'name' => $name,
-                'emailAddress' => $email,
-                'signerType' => 'Signer',
-                'formFields' => array(
-                    array(
-                        'id' => 'RadioButton1',
-                        'name' => 'RadioButton',
-                        'fieldType' => 'RadioButton',
-                        'groupName' => 'ConditionalLogic',
-                        'pageNumber' => 1,
-                        'bounds' =>  array(
-                            'x' => 50,
-                            'y' => 50,
-                            'width' => 20,
-                            'height' => 20
-                        ),
-                        "value" => "off",
-                        'isRequired' => false,
+        $signer = array(
+            'name' => $name,
+            'emailAddress' =>  $email,
+            'signerType' => 'Signer',
+            'formFields' => array(
+                array(
+                    'id' => 'string',
+                    'name' => 'string',
+                    'fieldType' => 'Signature',
+                    'pageNumber' => 1,
+                    'bounds' => array(
+                        'x' => 100,
+                        'y' => 100,
+                        'width' => 200,
+                        'height' => 25,
                     ),
-                    array(
-                        'id' => 'Radiobutton2',
-                        'name' => 'RadioButton',
-                        'fieldType' => 'RadioButton',
-                        'groupName' => 'ConditionalLogic',
-                        'pageNumber' => 1,
-                        'bounds' => array(
-                            'x' => 50,
-                            'y' => 70,
-                            'width' => 20,
-                            'height' => 20
-                        ),
-                        "value" => "off",
-                        "conditionalRules" => array(
-                            array(
-                                "fieldId" => "TextBoxField",
-                                "isChecked" => true
-                            )
-                        ),
-                        'isRequired' => false,
-                    ),
-                    array(
-                        'id' => 'TextBoxField',
-                        'name' => 'TextBoxField',
-                        'fieldType' => 'TextBox',
-                        'pageNumber' => 1,
-                        'bounds' => array(
-                            'x' => 50,
-                            'y' => 100,
-                            'width' => 200,
-                            'height' => 80
-                        ),
-                        'isRequired' => true,
-                        'multiline' => true,
-                    ),
-                    array(
-                        'id' => 'correct',
-                        'name' => 'correct',
-                        'fieldType' => 'TextBox',
-                        'pageNumber' => 1,
-                        'bounds' => array(
-                            'x' => 75,
-                            'y' => 50,
-                            'width' => 100,
-                            'height' => 15
-                        ),
-                        'isRequired' => false,
-                        'isReadOnly' => true,
-                        "value" => "correct address",
-                    ),
-                    array(
-                        'id' => 'incorrect',
-                        'name' => 'incorrect',
-                        'fieldType' => 'TextBox',
-                        'pageNumber' => 1,
-                        'bounds' => array(
-                            'x' => 75,
-                            'y' => 70,
-                            'width' => 200,
-                            'height' => 15
-                        ),
-                        'isRequired' => false,
-                        'isReadOnly' => true,
-                        'value' => 'incorrect address',
-                    )
+                    'isRequired' => true,
                 ),
-
-                'locale' => 'EN'
-            )),
-            'cc' => json_encode(array(
-                "emailAddress" => "pooja.solapurmath461@gmail.com",
-
-            )),
-            'cc' => json_encode(array(
-                "emailAddress" => "sytm33@gmail.com",
-
-            )),
-            'Files' => new CURLFile($filePath, 'application/pdf', 'sample.pdf'),
-            'Title' => 'eSign Document',
+            ),
+            'locale' => 'EN',
         );
 
-        // $signerData = [
-        //     'name' => 'Hanky',
-        //     'emailAddress' => 'hankyWhites@cubeflakes.com',
-        //     'signerType' => 'Signer',
-        //     'formFields' => [
-        //         [
-        //             'id' => 'string',
-        //             'name' => 'string',
-        //             'fieldType' => 'RadioButton',
-        //             'groupName' => 'Group1',
-        //             'pageNumber' => 1,
-        //             'bounds' => [
-        //                 'x' => 50,
-        //                 'y' => 50,
-        //                 'width' => 20,
-        //                 'height' => 20
-        //             ],
-        //             'isRequired' => true,
-        //         ],
-        //         [
-        //             'id' => 'string1',
-        //             'name' => 'string1',
-        //             'fieldType' => 'RadioButton',
-        //             'groupName' => 'Group1',
-        //             'pageNumber' => 1,
-        //             'bounds' => [
-        //                 'x' => 100,
-        //                 'y' => 100,
-        //                 'width' => 20,
-        //                 'height' => 20
-        //             ],
-        //             'isRequired' => true,
-        //         ]
-        //     ],
-        //     'locale' => 'EN'
-        // ];
+        $emailString = "dharapateltka@gmail.com, dharapateltka@gmail.com, sytm33@gmail.com , ankita.hirpara56@gmail.com,pooja.solapurmath461@gmail.com";
+        $emails = array_map('trim', explode(',', $emailString));
+        $uniqueEmails = array_unique($emails);
 
+        $ccRecipients = array_map(function ($email) {
+            return ['emailAddress' => $email];
+        }, $uniqueEmails);
+
+        foreach ($ccRecipients as $ccRecipient) {
+            if ($ccRecipient['emailAddress'] === $signer['emailAddress']) {
+                continue;
+            }
+            $ccFormData[] = [
+                'name' => 'cc[]',
+                'contents' => json_encode($ccRecipient),
+            ];
+        }
+
+        $ccValues = [];
+        foreach ($ccFormData as $index => $ccRecipient) {
+            $ccValues[] = $ccRecipient['contents'];
+        }
+
+        $postData = array(
+            'AutoDetectFields' => 'false',
+            'Message' => '',
+            'OnBehalfOf' => $OnBehalfOf,
+            'Signers' => json_encode($signer),
+            'cc' => $ccValues,
+            'Files' => new CURLFile($filePath, 'application/pdf', 'sample.pdf'),
+            'Title' => 'eSign Document',
+
+        );
         // $postData = array(
         //     'AutoDetectFields' => 'true',
-        //     'Message' => '',
-        //     'Signers' =>  json_encode($signerData),
+        //     'Message' => 'Sign the document',
+        //     'Signers' => json_encode(array(
+        //         'name' => $name,
+        //         'emailAddress' => $email,
+        //         'signerType' => 'Signer',
+        //         'formFields' => array(
+        //             array(
+        //                 'id' => 'RadioButton1',
+        //                 'name' => 'RadioButton',
+        //                 'fieldType' => 'RadioButton',
+        //                 'groupName' => 'ConditionalLogic',
+        //                 'pageNumber' => 1,
+        //                 'bounds' =>  array(
+        //                     'x' => 50,
+        //                     'y' => 50,
+        //                     'width' => 20,
+        //                     'height' => 20
+        //                 ),
+        //                 "value" => "off",
+        //                 'isRequired' => false,
+        //             ),
+        //             array(
+        //                 'id' => 'Radiobutton2',
+        //                 'name' => 'RadioButton',
+        //                 'fieldType' => 'RadioButton',
+        //                 'groupName' => 'ConditionalLogic',
+        //                 'pageNumber' => 1,
+        //                 'bounds' => array(
+        //                     'x' => 50,
+        //                     'y' => 70,
+        //                     'width' => 20,
+        //                     'height' => 20
+        //                 ),
+        //                 "value" => "off",
+        //                 "conditionalRules" => array(
+        //                     array(
+        //                         "fieldId" => "TextBoxField",
+        //                         "isChecked" => true
+        //                     )
+        //                 ),
+        //                 'isRequired' => false,
+        //             ),
+        //             array(
+        //                 'id' => 'TextBoxField',
+        //                 'name' => 'TextBoxField',
+        //                 'fieldType' => 'TextBox',
+        //                 'pageNumber' => 1,
+        //                 'bounds' => array(
+        //                     'x' => 50,
+        //                     'y' => 100,
+        //                     'width' => 200,
+        //                     'height' => 80
+        //                 ),
+        //                 'isRequired' => true,
+        //                 'multiline' => true,
+        //             ),
+        //             array(
+        //                 'id' => 'correct',
+        //                 'name' => 'correct',
+        //                 'fieldType' => 'TextBox',
+        //                 'pageNumber' => 1,
+        //                 'bounds' => array(
+        //                     'x' => 75,
+        //                     'y' => 50,
+        //                     'width' => 100,
+        //                     'height' => 15
+        //                 ),
+        //                 'isRequired' => false,
+        //                 'isReadOnly' => true,
+        //                 "value" => "correct address",
+        //             ),
+        //             array(
+        //                 'id' => 'incorrect',
+        //                 'name' => 'incorrect',
+        //                 'fieldType' => 'TextBox',
+        //                 'pageNumber' => 1,
+        //                 'bounds' => array(
+        //                     'x' => 75,
+        //                     'y' => 70,
+        //                     'width' => 200,
+        //                     'height' => 15
+        //                 ),
+        //                 'isRequired' => false,
+        //                 'isReadOnly' => true,
+        //                 'value' => 'incorrect address',
+        //             )
+        //         ),
+
+        //         'locale' => 'EN'
+        //     )),
+        //     'cc' => $ccRecipients,
+
         //     'Files' => new CURLFile($filePath, 'application/pdf', 'sample.pdf'),
         //     'Title' => 'eSign Document',
         // );
-
-
         $headers = array(
-            'accept: application/json',
             'X-API-KEY: ' . $this->apiKey,
             'Content-Type: multipart/form-data'
         );
@@ -197,6 +199,52 @@ class TemplateController extends Controller
         echo $response;
         return "Mail sent to $name ($email)";
     }
+    public function createIdentity()
+    {
+        $name = 'dhara';
+        $email = 'dharakadivar25@gmail.com';
+        $url = 'https://api.boldsign.com/v1/senderIdentities/create';
+
+        $data = [
+            'name' => $name,
+            'email' => $email,
+        ];
+
+        $headers = [
+            'accept: */*',
+            'X-API-KEY: ' . $this->apiKey,
+            'Content-Type: application/json',
+        ];
+
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        $response = curl_exec($ch);
+
+        curl_close($ch);
+        echo $response;
+        return "Identity mail sent to $name ($email)";
+    }
+    public function sendRemind(Request $request)
+    {
+        $documentId = $request->input('documentId');
+        $url = "https://api.boldsign.com/v1/document/remind?documentId=$documentId";
+
+        $response = Http::withHeaders([
+            'accept' => '*/*',
+            'X-API-KEY' => $this->apiKey,
+            'Content-Type' => 'application/json'
+        ])->post($url, [
+            "message" => "Reminder to sign the document",
+        ]);
+
+        if ($response->failed()) {
+            return 'HTTP request failed: ' . $response->body();
+        }
+        return "Reminder sent.";
+    }
     public function list()
     {
         $curl = curl_init();
@@ -211,7 +259,7 @@ class TemplateController extends Controller
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => 'GET',
             CURLOPT_HTTPHEADER => array(
-                'X-API-KEY: MGIwZDNmNzUtYWVmNi00ZDcyLTlmODYtNjNjMTk0MGM3Nzc0'
+                'X-API-KEY: NWIzNDA1MGQtMjViNy00YTI0LWJiYjEtYTc5OWZmZTE1MTUy'
             ),
         ));
 

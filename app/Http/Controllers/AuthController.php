@@ -11,10 +11,9 @@ class AuthController extends Controller
     {
         $authorizationUrl = 'https://account.boldsign.com/connect/authorize';
 
-
         $params = [
             'response_type' => 'code',
-            'client_id' => 'client_id',
+            'client_id' => 'bc45f496-8ebd-4c7c-b01b-4927ee5cd9b4',
             'state' => 'YTc2MzVhM2ItNGYyYjktY2EwYS00OTJkLTlmMjgtY2EwYzlhNzExNzE3',
             'scope' => 'BoldSign.Documents.All',
             'redirect_uri' => 'http://127.0.0.1:8000/list',
@@ -24,28 +23,30 @@ class AuthController extends Controller
 
         return redirect()->away($authorizationUrl . '?' . http_build_query($params));
     }
-    public function handleAuthorizationCallback(Request $request)
+
+    public function getAccessToken(Request $request)
     {
-        // Get the authorization code from the callback
-        $code = $request->query('code');
+        $authCode = $request->query('code');
+        $tokenEndpoint = 'https://account.boldsign.com/connect/token';
 
-        // Exchange the authorization code for an access token
-        $response = Http::post('TOKEN_ENDPOINT_URL', [
+        $params = [
             'grant_type' => 'authorization_code',
-            'code' => $code,
-            'client_id' => 'client_id',
-            'client_secret' => 'client_secret',
+            'client_id' => 'bc45f496-8ebd-4c7c-b01b-4927ee5cd9b4',
+            'client_secret' => '3b5749f8-2273-4d05-b328-d6aae6e6454f',
+            'code' => $authCode,
             'redirect_uri' => 'http://127.0.0.1:8000/list',
-        ]);
+            'code_verifier' => 'nxHHp32nZDub7D8IHEuqHhRzdjdklnFc-G0zY3nNeU',
+        ];
 
-        // Handle the response from the token endpoint
+        $response = Http::asForm()->post($tokenEndpoint, $params);
+
         if ($response->successful()) {
-            $accessToken = $response->json()['access_token'];
-            dd($response);
-            // Handle storing the access token securely or using it for API requests
-            // Redirect or perform further actions based on successful authorization
+            $accessToken = $response->json();
+            return $accessToken;
         } else {
-            // Handle authorization failure
+            $error = $response->json();
+            return $error;
         }
     }
 }
+

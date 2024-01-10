@@ -25,7 +25,10 @@
                                 <label for="email" class="form-label">Email:</label>
                                 <input type="text" class="form-control" id="email" name="email">
                             </div>
-
+                            <div class="mb-3">
+                                <label for="OnBehalfOf" class="form-label">OnBehalfOf:</label>
+                                <input type="text" class="form-control" id="OnBehalfOf" name="OnBehalfOf">
+                            </div>
                             <div class="text-center">
                                 <button type="submit" class="btn btn-primary">Send Mail</button>
                             </div>

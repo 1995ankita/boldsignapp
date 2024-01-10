@@ -43,12 +43,20 @@
                                 <input type="hidden" name="documentId" value="{{ $document->documentId }}">
                                 <button type="submit" class="btn btn-primary">PDF</button>
                             </form>
-
+                            @if ($document->status != 'Completed')
+                            <form method="POST" action="{{ url('sendRemind') }}" style="margin-top: 10px;">
+                                @csrf
+                                <input type="hidden" name="documentId" value="{{ $document->documentId }}">
+                                <button type="submit" class="btn btn-primary">Remind</button>
+                            </form>
+                            @endif
                             @if ($document->status == 'Completed')
-                                <form method="GET" action="{{ url('download-audittrail') }}" style="margin-top: 10px;">
+                                <form method="GET" action="{{ url('download-audittrail') }}"
+                                    style="margin-top: 10px;">
                                     @csrf
                                     <input type="hidden" name="documentId" value="{{ $document->documentId }}">
-                                    <button type="submit" class="btn btn-primary" style="white-space: nowrap;">Audit-trail</button>
+                                    <button type="submit" class="btn btn-primary"
+                                        style="white-space: nowrap;">Audit-trail</button>
                                 </form>
                             @endif
                         </td>
