@@ -13,8 +13,8 @@ class TemplateController extends Controller
 
     public function __construct()
     {
-        // $this->apiKey = 'MGIwZDNmNzUtYWVmNi00ZDcyLTlmODYtNjNjMTk0MGM3Nzc0'; //pooja
-        $this->apiKey = 'NWIzNDA1MGQtMjViNy00YTI0LWJiYjEtYTc5OWZmZTE1MTUy'; //dhara
+        $this->apiKey = 'MGIwZDNmNzUtYWVmNi00ZDcyLTlmODYtNjNjMTk0MGM3Nzc0'; //pooja
+        // $this->apiKey = 'NWIzNDA1MGQtMjViNy00YTI0LWJiYjEtYTc5OWZmZTE1MTUy'; //dhara
     }
     public function showMailForm()
     {
@@ -49,8 +49,8 @@ class TemplateController extends Controller
             ),
             'locale' => 'EN',
         );
-
-        $emailString = "dharapateltka@gmail.com, dharapateltka@gmail.com, sytm33@gmail.com , ankita.hirpara56@gmail.com,pooja.solapurmath461@gmail.com";
+        //sytm33@gmail.com  ,  ankita.hirpara56@gmail.com  , pooja.solapurmath461@gmail.com
+        $emailString = "dharapateltka@gmail.com, dharapateltka@gmail.com";
         $emails = array_map('trim', explode(',', $emailString));
         $uniqueEmails = array_unique($emails);
 
@@ -74,10 +74,12 @@ class TemplateController extends Controller
         }
 
         $postData = array(
-            'AutoDetectFields' => 'false',
-            'Message' => '',
+            'AutoDetectFields' => 'true',
+            // 'allowConfigureFields'=> 'false',
+            'Message' => 'sign the document',
             'OnBehalfOf' => $OnBehalfOf,
             'Signers' => json_encode($signer),
+            'disableEmails' => 'true',
             'cc' => $ccValues,
             'Files' => new CURLFile($filePath, 'application/pdf', 'sample.pdf'),
             'Title' => 'eSign Document',
@@ -197,7 +199,26 @@ class TemplateController extends Controller
         }
         curl_close($ch);
         echo $response;
-        return "Mail sent to $name ($email)";
+        $responseData = json_decode($response, true);
+        $documentId = $responseData['documentId'];
+        echo '<a href="' . route('generate-link', ['documentId' => $documentId, 'email' => $email]) . '">Generate Link</a>';
+        // return "Mail sent to $name ($email)";
+
+    }
+    public function embeddedSigningLink($documentId, $email)
+    {
+        $redirectURL = 'http://127.0.0.1:8000/welcome';
+        $url = "https://api.boldsign.com/v1/document/getEmbeddedSignLink?documentId=$documentId&signerEmail=$email&redirectUrl=$redirectURL";
+
+        $response = Http::withHeaders([
+            'X-API-KEY' => $this->apiKey,
+        ])->get($url);
+
+        if ($response->successful()) {
+            echo $response->body();
+        } else {
+            return 'HTTP request failed with status code ' . $response->status() . ': ' . $response->body();
+        }
     }
     public function createIdentity()
     {

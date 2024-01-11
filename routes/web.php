@@ -15,19 +15,22 @@ use App\Http\Controllers\TemplateController;
 |
 */
 
+Route::get('/welcome', function () {
+    return view('welcome');
+});
 
 Route::get('/', function () {
     return view('form');
 });
 
+Route::get('/showMailForm',         [TemplateController::class, 'showMailForm']);
+Route::post('/send-mail',           [TemplateController::class, 'sendMail'])->name('sendMail');
+Route::post('/sendRemind',          [TemplateController::class, 'sendRemind']);
+Route::get('/createIdentity',       [TemplateController::class, 'createIdentity']);
+Route::get('/embeddedSigningLink/{documentId}/{email}', [TemplateController::class, 'embeddedSigningLink'])->name('generate-link');
+Route::get('/list',                 [TemplateController::class, 'list']);
+Route::get('/download-pdf',         [TemplateController::class, 'downloadPdf'])->name('download-pdf');
+Route::get('/download-audittrail',  [TemplateController::class, 'downloadAudittrail'])->name('download-audittrail');
 
-Route::get('/showMailForm', [TemplateController::class, 'showMailForm']);
-Route::post('/send-mail', [TemplateController::class, 'sendMail'])->name('sendMail');;
-Route::post('/sendRemind', [TemplateController::class, 'sendRemind']);
-Route::get('/createIdentity', [TemplateController::class, 'createIdentity']);
-Route::get('/list', [TemplateController::class, 'list']);
-Route::get('/download-pdf', [TemplateController::class, 'downloadPdf'])->name('download-pdf');
-Route::get('/download-audittrail', [TemplateController::class, 'downloadAudittrail'])->name('download-audittrail');
-
-Route::get('/authorize',  [AuthController::class, 'redirectToAuthorization'])->name('auth.authorize');
-Route::get('/callback', [AuthController::class, 'getAccessToken'])->name('auth.callback');
+Route::get('/authorize',            [AuthController::class, 'redirectToAuthorization'])->name('auth.authorize');
+Route::get('/callback',             [AuthController::class, 'getAccessToken'])->name('auth.callback');
