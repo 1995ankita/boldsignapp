@@ -8,6 +8,11 @@
     <!-- Include Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
+@if (session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
 
 <body>
     <div class="container col-md-8 mt-5">
@@ -23,7 +28,7 @@
                     <th>Activity By</th>
                     <th>Title</th>
                     <th>Status</th>
-                    <th>Download</th>
+                    <th style="width: 170px;">Download</th>
                 </tr>
             </thead>
             <tbody>
@@ -37,29 +42,71 @@
                         <td>{{ $document->messageTitle }}</td>
                         <td>{{ $document->status }}</td>
 
-                        <td>
+                        {{-- <td>
                             <form method="GET" action="{{ url('download-pdf') }}">
                                 @csrf
                                 <input type="hidden" name="documentId" value="{{ $document->documentId }}">
-                                <button type="submit" class="btn btn-primary">PDF</button>
+                                <button type="submit" class="btn btn-link">PDF</button>
                             </form>
                             @if ($document->status != 'Completed')
-                            <form method="POST" action="{{ url('sendRemind') }}" style="margin-top: 10px;">
-                                @csrf
-                                <input type="hidden" name="documentId" value="{{ $document->documentId }}">
-                                <button type="submit" class="btn btn-primary">Remind</button>
-                            </form>
-                            @endif
-                            @if ($document->status == 'Completed')
-                                <form method="GET" action="{{ url('download-audittrail') }}"
-                                    style="margin-top: 10px;">
+                                <form method="POST" action="{{ url('sendRemind') }}">
                                     @csrf
                                     <input type="hidden" name="documentId" value="{{ $document->documentId }}">
-                                    <button type="submit" class="btn btn-primary"
+                                    <button type="submit" class="btn btn-link">Remind</button>
+                                </form>
+                                <form method="POST" action="{{ url('extendExpiry') }}">
+                                    @csrf
+                                    <input type="hidden" name="documentId" value="{{ $document->documentId }}">
+                                    <button type="submit" class="btn btn-link">Extend expiry</button>
+                                </form>
+                            @endif
+                            @if ($document->status == 'Completed')
+                                <form method="GET" action="{{ url('download-audittrail') }}">
+                                    @csrf
+                                    <input type="hidden" name="documentId" value="{{ $document->documentId }}">
+                                    <button type="submit" class="btn btn-link"
                                         style="white-space: nowrap;">Audit-trail</button>
                                 </form>
                             @endif
+                        </td> --}}
+                        <td>
+                            <div class="d-flex flex-column align-items-start">
+                                <form method="GET" action="{{ url('download-pdf') }}">
+                                    @csrf
+                                    <input type="hidden" name="documentId" value="{{ $document->documentId }}">
+                                    <button type="submit" class="btn btn-link">Download PDF</button>
+                                </form>
+                                <form method="POST" action="{{ url('revokeDocument') }}">
+                                    @csrf
+                                    <input type="hidden" name="documentId" value="{{ $document->documentId }}">
+                                    <button type="submit" class="btn btn-link">Revoke Document</button>
+                                </form>
+                                @if ($document->status != 'Completed')
+                                    <form method="POST" action="{{ url('sendRemind') }}">
+                                        @csrf
+                                        <input type="hidden" name="documentId" value="{{ $document->documentId }}">
+                                        <button type="submit" class="btn btn-link">Send Reminder</button>
+                                    </form>
+
+                                    <form method="POST" action="{{ url('extendExpiry') }}">
+                                        @csrf
+                                        <input type="hidden" name="documentId" value="{{ $document->documentId }}">
+                                        <button type="submit" class="btn btn-link">Extend Expiry</button>
+                                    </form>
+                                @endif
+
+                                @if ($document->status == 'Completed')
+                                    <form method="GET" action="{{ url('download-audittrail') }}">
+                                        @csrf
+                                        <input type="hidden" name="documentId" value="{{ $document->documentId }}">
+                                        <button type="submit" class="btn btn-link"
+                                            style="white-space: nowrap;">Audit-trail</button>
+                                    </form>
+                                @endif
+                            </div>
                         </td>
+
+
 
                     </tr>
                 @endforeach

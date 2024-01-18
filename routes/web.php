@@ -23,10 +23,22 @@ Route::get('/', function () {
     return view('form');
 });
 
-Route::get('/showMailForm',         [TemplateController::class, 'showMailForm']);
+// Route::get('/showMailForm',         [TemplateController::class, 'showMailForm']);
+Route::get('/createTemplate',       [TemplateController::class, 'createTemplate']);
 Route::post('/send-mail',           [TemplateController::class, 'sendMail'])->name('sendMail');
 Route::post('/sendRemind',          [TemplateController::class, 'sendRemind']);
+Route::get('/sendDocument',          [TemplateController::class, 'sendDocument']);
+
+
+//Identity
 Route::get('/createIdentity',       [TemplateController::class, 'createIdentity']);
+Route::get('/listIdentity',         [TemplateController::class, 'listIdentity']);
+Route::delete('/deleteIdentity/{email}', [TemplateController::class, 'deleteIdentity'])->name('deleteIdentity');
+
+Route::get('/apiCreditsCount',       [TemplateController::class, 'apiCreditsCount']);
+Route::post('/revokeDocument',       [TemplateController::class, 'revokeDocument']);
+
+Route::get('/extendExpiry',         [TemplateController::class, 'extendExpiry']);
 Route::get('/embeddedSigningLink/{documentId}/{email}', [TemplateController::class, 'embeddedSigningLink'])->name('generate-link');
 Route::get('/list',                 [TemplateController::class, 'list']);
 Route::get('/download-pdf',         [TemplateController::class, 'downloadPdf'])->name('download-pdf');
